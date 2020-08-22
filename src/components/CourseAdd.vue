@@ -8,7 +8,7 @@
         @change="onChange"
         v-on:keydown.enter="addCourse"
         ref="inp"
-        v-focus
+        class="inp"
       />
       <button @click="addCourse">新增</button>
     </p>
@@ -34,4 +34,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.inp {
+  margin: 5px;
+}
+</style>

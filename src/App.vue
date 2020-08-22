@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <img :src="`${publicPath}assets/logo.png`" alt="logo">
     <!-- 弹窗组件 -->
     <!-- <message :show.sync="show" class="success"> -->
     <message ref="msgSuccess" class="success">
@@ -33,13 +34,18 @@
 </template>
 
 <script>
+import Vue from "vue";
 import CourseList from "@/components/CourseList.vue";
 import CourseAdd from "@/components/CourseAdd.vue";
-import { getCourse } from "@/api/course.js";
+import Message from "@/components/Message.vue";
+import { getCourses } from "@/api/course.js";
+// 总线
+Vue.prototype.$bus = new Vue();
 
 export default {
   name: "app",
   components: {
+    Message,
     CourseAdd,
     CourseList,
   },
@@ -52,11 +58,12 @@ export default {
       // show: false,
       // showWarn: false,
       price: 0,
+      publicPath: process.env.BASE_URL
     };
   },
   async created() {
     // 组件实例已创建，由于未挂载，dom不存在
-    const courses = await getCourse();
+    const courses = await getCourses();
     this.courses = courses;
 
     // 批量更新商品价格
@@ -80,7 +87,7 @@ export default {
     },
     batchUpdate() {
       this.courses.forEach((c) => {
-        // c.price = this.price
+        this.price = 800
         this.$set(c, "price", this.price);
         // Vue.set(c, 'price', this.price)
       });
@@ -89,7 +96,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+a {
+  color: $color;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -107,25 +117,8 @@ export default {
   overflow: hidden;
 }
 
-.active {
-  background-color: #ddd;
+#app {
+  /deep/ .inp {
+    border: 1px solid #2687e7;
+  }
 }
-
-.message-box {
-  padding: 10px 20px;
-}
-
-.success {
-  background: #4fc08d;
-  border: 1px solid #42b983;
-}
-
-.warning {
-  background: #f66;
-  border: 1px solid #d63200;
-}
-
-.message-box-close {
-  float: right;
-}
-</style>
