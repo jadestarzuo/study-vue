@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- 新增课程 -->
     <CourseAdd v-model="course" @add-course="addCourse"></CourseAdd>
+    <!-- 课程列表 -->
     <CourseList :courses="courses"></CourseList>
   </div>
 </template>
