@@ -1,50 +1,83 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <CourseAdd v-model="course" @add-course="addCourse"></CourseAdd>
+    <CourseList :courses="courses"></CourseList>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CourseList from "@/components/CourseList.vue";
+import CourseAdd from "@/components/CourseAdd.vue";
+import {getCourse} from "@/api/course.js"
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
-  }
-}
+    CourseAdd,
+    CourseList,
+  },
+  data() {
+    return {
+      title: "开课吧购物车",
+      course: "",
+      courses: [],
+      totalCount: 0,
+      // show: false,
+      // showWarn: false,
+      price: 0,
+    };
+  },
+  async created() {
+    // 组件实例已创建，由于未挂载，dom不存在
+    const courses = await getCourse();
+    this.courses = courses;
+
+    // 批量更新商品价格
+    this.batchUpdate();
+  },
+  methods: {
+    addCourse() {
+      if (this.course) {
+        // 添加course到数组
+        this.courses.push({ name: this.course });
+        this.course = "";
+
+        // 显示提示信息
+        // this.show = true
+        this.$refs.msgSuccess.toggle();
+      } else {
+        // 显示错误信息
+        // this.showWarn = true
+        this.$refs.msgWarning.toggle();
+      }
+    },
+    batchUpdate() {
+      this.courses.forEach((c) => {
+        // c.price = this.price
+        this.$set(c, "price", this.price);
+        // Vue.set(c, 'price', this.price)
+      });
+    },
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
 
-<style scoped>
-#app {
-  background-color: #ccc;
-}
-
-.hello {
-  border: 4px solid rgb(25, 172, 123);
-}
-
-/* 深度选择器 */
-/* #app >>> p {
-  color: rgb(255, 124, 1);
-} */
-</style>
-
-<style scoped lang="scss">
-/* 深度选择器 */
-#app ::v-deep p {
-  color: rgb(255, 124, 1);
-}
+.icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      fill: currentColor;
+      overflow: hidden;
+    }
 </style>
