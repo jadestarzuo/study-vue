@@ -1,6 +1,30 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- 弹窗组件 -->
+    <!-- <message :show.sync="show" class="success"> -->
+    <message ref="msgSuccess" class="success">
+      <!-- 命名为title插槽内容 -->
+      <template v-slot:title="slotProps">
+        <strong>{{ slotProps.title }}</strong>
+      </template>
+      <!-- 默认插槽内容 -->
+      <template v-slot:default>
+        新增课程成功!
+      </template>
+    </message>
+
+    <!-- <message :show.sync="showWarn" class="warning"> -->
+    <message ref="msgWarning" class="warning">
+      <!-- 命名为title插槽内容 -->
+      <template v-slot:title>
+        <strong>警告</strong>
+      </template>
+      <!-- 默认插槽内容 -->
+      <template v-slot:default>
+        请输入课程名称!
+      </template>
+    </message>
+
     <!-- 新增课程 -->
     <CourseAdd v-model="course" @add-course="addCourse"></CourseAdd>
     <!-- 课程列表 -->
@@ -11,7 +35,7 @@
 <script>
 import CourseList from "@/components/CourseList.vue";
 import CourseAdd from "@/components/CourseAdd.vue";
-import {getCourse} from "@/api/course.js"
+import { getCourse } from "@/api/course.js";
 
 export default {
   name: "app",
@@ -76,10 +100,32 @@ export default {
 }
 
 .icon {
-      width: 1em;
-      height: 1em;
-      vertical-align: -0.15em;
-      fill: currentColor;
-      overflow: hidden;
-    }
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.active {
+  background-color: #ddd;
+}
+
+.message-box {
+  padding: 10px 20px;
+}
+
+.success {
+  background: #4fc08d;
+  border: 1px solid #42b983;
+}
+
+.warning {
+  background: #f66;
+  border: 1px solid #d63200;
+}
+
+.message-box-close {
+  float: right;
+}
 </style>
